@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>청송사과 특별 프로모션</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: left; /* 텍스트 정렬을 왼쪽으로 설정 */
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 100vw; /* 뷰포트 너비를 100%로 설정 */
+            height: 100vh; /* 뷰포트 높이를 100%로 설정 */
+            overflow: hidden; /* 페이지 내용이 넘칠 경우 스크롤바 표시하지 않음 */
+        }
+
+        /* 이미지 업로드 컨테이너 스타일 */
+        .upload-container {
+            position: absolute;
+            top: 50px; /* 오른쪽 상단으로 배치하기 위한 값 */
+            right: 1500px; /* 오른쪽 상단으로 배치하기 위한 값 */
+            background-color: #4CAF50;
+            text-align: center;
+            padding: 10px;
+            z-index: 1; /* 다른 요소 위에 표시 */
+        }
+
+        .upload-input {
+            display: none;
+        }
+
+        /* 이미지 업로드 버튼 스타일 */
+        .upload-label {
+            background-color: #fff;
+            color: #4CAF50;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* A4 용지 크기 (210mm x 297mm)에 맞게 설정 */
+        .a4-container {
+            width: 210mm;
+            height: 297mm;
+            background-color: #fff;
+            display: flex;
+            flex-direction: row;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0);
+        }
+
+        .a4-box {
+            width: 75%; /* 왼쪽 75% 공간은 텍스트 영역 */
+            height: 100%;
+            padding: 20px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        h1 {
+            color: #FF5722;
+        }
+
+        p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .highlight {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        img {
+            width: 400px;
+            height: auto; /* 가로 세로 비율을 유지하도록 설정 */
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <input type="file" class="upload-input" id="image-upload" accept="image/*">
+        <label for="image-upload" class="upload-label">이미지 업로드</label>
+        <!-- Add an <img> element to display the uploaded image in the same container -->
+        <img id="uploaded-image" src="" alt="Uploaded Image" style="display: none; max-width: 100%;">
+    </div>
+    <div class="a4-container">
+        <div class="a4-box">
+            <h1>청송사과 특별 프로모션</h1>
+            <p><span class="highlight">무료배송</span>으로</p>
+            <p><span class="highlight">청송사과 1kg</span>를</p>
+            <p><span class="highlight">15000원</span>에 만나보세요!</p>
+        </div>
+    </div>
+    <script>
+        const uploadInput = document.getElementById('image-upload');
+        const uploadedImage = document.getElementById('uploaded-image');
+        const uploadLabel = document.querySelector('.upload-label');
+
+        uploadInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    uploadedImage.style.display = 'block';
+                    uploadedImage.src = event.target.result;
+                    // 이미지가 업로드되면 업로드 버튼을 숨김
+                    uploadLabel.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
