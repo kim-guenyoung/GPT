@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>농산물 포스터</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .poster {
+            background-color: white;
+            width: 200px; /* 고정된 너비 설정 */
+            height: 297px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column; /* 내부 요소들을 세로로 배치 */
+            justify-content: space-between; /*내부 요소들을 최상단과 최하단에 배치 */
+        }
+        .product-image {
+            max-width: calc(200px / 2.5); /* A4 용지의 1/6 크기로 설정 */
+            height: auto;
+            margin: -15px 0 10px auto; /* 이미지 오른쪽 정렬 및 간격을 조절 */
+            display: block;
+        }
+
+        /* h2 요소와 이미지 간격 조절 */
+        h2#dynamicHeading {
+            margin-top: 0;
+            margin-bottom: -15px; /* h2 요소 아래 간격을 조절 (10px) */
+        }
+
+        /* 입력 폼 스타일 수정 */
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 입력 폼을 가운데로 정렬 */
+            margin-bottom: 20px; /* 추가 간격을 조절 (20px) */
+        }
+
+        /* 입력 창 스타일 */
+        .user-input, .seller-input, .contact-input {
+            width: 150px; /* 입력 창의 너비 조정 (150px) */
+            text-align: left; /* 텍스트 왼쪽 정렬 추가 */
+        }
+
+        /* 입력 버튼 스타일 */
+        .submit-button {
+            width: auto; /* 버튼 너비를 내용에 맞게 조정 */
+        }
+
+        /* 판매자 입력 placeholder 스타일 수정 */
+        .seller-input::placeholder, .contact-input::placeholder {
+            text-align: left; /* 텍스트 왼쪽 정렬 */
+            margin-top: 50px;
+        }
+
+        /* 추가된 판매자 정보 스타일 */
+        #sellerInfo {
+            text-align: left; /* 정보 왼쪽 정렬 */
+            margin-bottom: -10px;
+        }
+        #contactInfo {
+            text-align: left; /* 정보 왼쪽 정렬 */
+            margin-bottom: -5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="poster">
+        <!-- Dynamic h2 that will be updated based on user input -->
+        <h2 id="dynamicHeading"></h2>
+
+        <!-- User input form -->
+        <form id="userInputForm">
+            <div class="input-container">
+                <input type="text" id="userInput" name="userInput" class="user-input" placeholder="회사명">
+                <button type="submit" class="submit-button">입력</button>
+            </div>
+        </form>
+
+        <!-- Image upload button -->
+        <input type="file" id="imageUpload" accept="image/*">
+        <!-- Image preview area -->
+        <img class="product-image" id="imagePreview" src="" style="display: none;">
+
+        <!-- 판매자 이름 입력 폼 -->
+        <form id="sellerNameForm">
+            <div class="input-container">
+                <input type="text" id="sellerName" name="sellerName" class="seller-input" placeholder="판매자명">
+                <button type="submit" class="submit-button">입력</button>
+            </div>
+        </form>
+
+        <!-- 판매자 연락처 입력 폼 -->
+        <form id="contactForm">
+            <div class="input-container">
+                <input type="text" id="contact" name="contact" class="contact-input" placeholder="연락처">
+                <button type="submit" class="submit-button">입력</button>
+            </div>
+        </form>
+
+        <!-- 판매자 정보 출력 -->
+        <h6 id="sellerInfo"></h6>
+        
+        <!-- 판매자 연락처 출력 -->
+        <h6 id="contactInfo"></h6>
+    </div>
+
+    <script>
+        const userInputField = document.getElementById("userInput");
+        const dynamicHeading = document.getElementById("dynamicHeading");
+        const userInputForm = document.getElementById("userInputForm");
+        const imageUpload = document.getElementById("imageUpload");
+        const imagePreview = document.getElementById("imagePreview");
+        const sellerNameInput = document.getElementById("sellerName");
+        const sellerNameForm = document.getElementById("sellerNameForm");
+        const contactInput = document.getElementById("contact");
+        const contactForm = document.getElementById("contactForm");
+        const sellerInfo = document.getElementById("sellerInfo");
+        const contactInfo = document.getElementById("contactInfo");
+
+        userInputForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting and reloading the page
+            const userInput = userInputField.value;
+            dynamicHeading.textContent = userInput;
+            userInputForm.style.display = "none"; // Hide the input field and submit button after submission
+        });
+
+        // Handle image upload and display the preview
+        imageUpload.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const imageUrl = URL.createObjectURL(file);
+                imagePreview.src = imageUrl;
+                imagePreview.style.display = "block"; // Show the image preview
+
+                // Hide the file selection input and button
+                imageUpload.style.display = "none";
+            }
+        });
+
+        sellerNameForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting and reloading the page
+            const sellerName = sellerNameInput.value;
+            sellerInfo.innerHTML = `<h6>판매자명: ${sellerName}</h6>`;
+            sellerNameForm.style.display = "none"; // Hide the seller name input field and submit button
+        });
+
+        contactForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting and reloading the page
+            const contact = contactInput.value;
+            contactInfo.innerHTML = `<h6>연락처: ${contact}</h6>`;
+            contactForm.style.display = "none"; // Hide the contact input field and submit button
+        });
+    </script>
+</body>
+</html>

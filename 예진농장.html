@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>농산물 포스터</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .poster {
+            background-color: white;
+            width: 200px; /* 고정된 너비 설정 */
+            height: 297px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            position: relative; /* 부모 요소로부터의 상대 위치 설정 */
+        }
+        .product-image {
+            max-width: calc(200px / 2.5); /* A4 용지의 1/6 크기로 설정 */
+            height: auto;
+            margin: -15px 0; /* 이미지 주위의 간격을 조절 (필요에 따라 조절) */
+            float: right; /* 이미지를 오른쪽으로 이동 */
+        }
+
+        /* h2 요소와 이미지 간격 조절 */
+        h2#dynamicHeading {
+            margin-top: 0;
+            margin-bottom: 20px; /* h2 요소 아래 간격을 조절 (필요에 따라 조절) */
+        }
+
+        /* h6 요소 스타일 */
+        h6#sellerNameText, h6#sellerContactText {
+            position: absolute; /* 절대 위치 설정 */
+            left: 20px; /* 왼쪽에서 10px만 띄우기 */
+            width: 100%; /* 폭을 100%로 설정하여 가로 전체를 차지하도록 함 */
+            font-weight: bold;
+            white-space: nowrap; /* 긴 텍스트가 줄 바꿈되지 않도록 설정 */
+            text-align: left; /* 왼쪽 정렬 추가 */
+        }
+
+        /* 입력 폼 스타일 수정 */
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* 입력 폼을 왼쪽으로 정렬 */
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        /* 입력 창과 레이블을 한 줄에 정렬하는 스타일 */
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 가운데 정렬을 위해 추가 */
+            margin-bottom: 10px;
+        }
+
+        /* 입력 창 스타일 */
+        #userInput, #sellerName, #sellerContact {
+            width: 150px; /* 입력 창의 너비 조정 (필요에 따라 조절) */
+        }
+
+        /* 입력 버튼 스타일 */
+        #submitButton, #sellerNameButton, #sellerContactButton {
+            width: auto; /* 버튼 너비를 내용에 맞게 조정 */
+        }
+    </style>
+</head>
+<body>
+    <div class="poster">
+        <!-- Dynamic h2 that will be updated based on user input -->
+        <h2 id="dynamicHeading"></h2>
+        <!-- User input form for company name -->
+        <form id="userInputForm">
+            <div class="input-container">
+                <input type="text" id="userInput" name="userInput" placeholder="회사명">
+                <button type="submit" id="submitButton">입력</button>
+            </div>
+        </form>
+        <!-- Seller name input field and button -->
+        <div class="input-container" id="sellerNameContainer">
+            <input type="text" id="sellerName" name="sellerName" placeholder="판매자 이름">
+            <button type="button" id="sellerNameButton">입력</button>
+        </div>
+        <!-- Seller contact input field and button -->
+        <div class="input-container" id="sellerContactContainer">
+            <input type="text" id="sellerContact" name="sellerContact" placeholder="판매자 연락처">
+            <button type="button" id="sellerContactButton">입력</button>
+        </div>
+        <!-- Image upload button -->
+        <input type="file" id="imageUpload" accept="image/*">
+        <!-- Image preview area -->
+        <img class="product-image" id="imagePreview" src="" style="display: none;">
+        <!-- Seller name display -->
+        <h6 id="sellerNameText" style="bottom: 0;"></h6>
+        <!-- Seller contact display -->
+        <h6 id="sellerContactText" style="bottom: -15px;"></h6>
+    </div>
+
+    <!-- JavaScript to handle form submissions and image uploads -->
+    <script>
+        const userInputField = document.getElementById("userInput");
+        const sellerNameField = document.getElementById("sellerName");
+        const sellerContactField = document.getElementById("sellerContact");
+        const submitButton = document.getElementById("submitButton");
+        const sellerNameButton = document.getElementById("sellerNameButton");
+        const sellerContactButton = document.getElementById("sellerContactButton");
+        const sellerNameContainer = document.getElementById("sellerNameContainer");
+        const sellerContactContainer = document.getElementById("sellerContactContainer");
+        const dynamicHeading = document.getElementById("dynamicHeading");
+        const sellerNameText = document.getElementById("sellerNameText");
+        const sellerContactText = document.getElementById("sellerContactText");
+        const userInputForm = document.getElementById("userInputForm");
+        const imageUpload = document.getElementById("imageUpload");
+        const imagePreview = document.getElementById("imagePreview");
+
+        // 초기에 판매자 이름 입력 폼과 판매자 연락처 입력 폼을 숨김
+        sellerNameContainer.style.display = "none";
+        sellerContactContainer.style.display = "none";
+
+        userInputForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting and reloading the page
+            const userInput = userInputField.value;
+            dynamicHeading.textContent = `${userInput}`;
+            userInputForm.style.display = "none"; // Hide the input field and submit button after submission
+            sellerNameContainer.style.display = "block"; // Show the seller name input container
+        });
+
+        sellerNameButton.addEventListener("click", function () {
+            const sellerName = sellerNameField.value;
+            sellerNameText.textContent = `판매자명: ${sellerName}`;
+            sellerNameField.value = ""; // Clear the input field (optional)
+            sellerNameContainer.style.display = "none"; // Hide the seller name input container
+            sellerContactContainer.style.display = "block"; // Show the seller contact input container
+        });
+
+        sellerContactButton.addEventListener("click", function () {
+            const sellerContact = sellerContactField.value;
+            sellerContactText.textContent = `판매자 연락처: ${sellerContact}`;
+            sellerContactField.value = ""; // Clear the input field (optional)
+            sellerContactContainer.style.display = "none"; // Hide the seller contact input container
+            imageUpload.style.display = "block"; // Show the image upload button
+        });
+
+        imageUpload.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const imageUrl = URL.createObjectURL(file);
+                imagePreview.src = imageUrl;
+                imagePreview.style.display = "block"; // Show the image preview
+                imageUpload.style.display = "none"; // Hide the file selection input and button
+            }
+        });
+    </script>
+    <script src="custom.js"></script>
+</body>
+</html>

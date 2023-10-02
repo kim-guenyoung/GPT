@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>농산물 포스터</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        .poster {
+            background-color: white;
+            width: 200px;
+            height: 297px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-image {
+            max-width: calc(200px / 2.5);
+            height: auto;
+            margin: -15px 0 10px auto;
+            display: block;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .user-input, .seller-input, .contact-input {
+            width: 150px;
+            text-align: left;
+        }
+        .submit-button {
+            width: auto;
+        }
+        .seller-input::placeholder, .contact-input::placeholder {
+            text-align: left;
+            margin-top: 50px;
+        }
+        #sellerInfo {
+            text-align: left;
+            margin-top: 20px; /* 이 값을 증가시켜서 내릴 수 있습니다. */
+            margin-bottom: -200px;
+            vertical-align: bottom;
+        }
+
+        #contactInfo {
+            text-align: left;
+            margin-top: 20px; /* 이 값을 증가시켜서 내릴 수 있습니다. */
+            margin-top: -50px;
+            vertical-align: bottom;
+        }
+    </style>
+</head>
+<body>
+    <div class="poster">
+        <h2 id="dynamicHeading"></h2>
+        <form id="userInputForm">
+            <div class="input-container">
+                <input type="text" id="userInput" name="userInput" class="user-input" placeholder="회사명">
+                <button type="submit" class="submit-button">입력</button>
+            </div>
+        </form>
+        <input type="file" id="imageUpload" accept="image/*">
+        <img class="product-image" id="imagePreview" src="" style="display: none;">
+        <form id="sellerNameForm">
+            <div class="input-container">
+                <input type="text" id="sellerName" name="sellerName" class="seller-input" placeholder="판매자명">
+                <button type="submit" class="submit-button">입력</button>
+            </div>
+        </form>
+        <h6 id="sellerInfo"></h6>
+        <form id="contactForm">
+            <div class="input-container">
+                <input type="text" id="contact" name="contact" class="contact-input" placeholder="연락처">
+                <button type="submit" class="submit-button">입력</button>
+            </div>
+        </form>
+        <h6 id="contactInfo"></h6>
+    </div>
+    <script>
+        const userInputField = document.getElementById("userInput");
+        const dynamicHeading = document.getElementById("dynamicHeading");
+        const userInputForm = document.getElementById("userInputForm");
+        const imageUpload = document.getElementById("imageUpload");
+        const imagePreview = document.getElementById("imagePreview");
+        const sellerNameInput = document.getElementById("sellerName");
+        const sellerNameForm = document.getElementById("sellerNameForm");
+        const contactInput = document.getElementById("contact");
+        const contactForm = document.getElementById("contactForm");
+        const sellerInfo = document.getElementById("sellerInfo");
+        const contactInfo = document.getElementById("contactInfo");
+
+        userInputForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const userInput = userInputField.value;
+            dynamicHeading.textContent = userInput;
+            userInputForm.style.display = "none";
+        });
+
+        imageUpload.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const imageUrl = URL.createObjectURL(file);
+                imagePreview.src = imageUrl;
+                imagePreview.style.display = "block";
+                imageUpload.style.display = "none";
+            }
+        });
+
+        sellerNameForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const sellerName = sellerNameInput.value;
+            sellerInfo.innerHTML = `<h6>판매자명: ${sellerName}</h6>`;
+            sellerNameForm.style.display = "none";
+            contactForm.style.display = "block";
+        });
+
+        contactForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const contact = contactInput.value;
+            contactInfo.innerHTML = `<h6>연락처: ${contact}</h6>`;
+            contactForm.style.display = "none";
+        });
+    </script>
+</body>
+</html>
